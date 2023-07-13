@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
 
-const URL = "ws://localhost:3000"
+const URL = import.meta.env.VITE_SERVER
 
 export const socket = io(URL)
