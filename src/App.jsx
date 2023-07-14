@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { socket } from './socket'
 import { BiSolidSearch } from 'react-icons/bi'
+import { axios } from 'axios'
 
 function App() {
 
@@ -10,6 +11,8 @@ function App() {
   const [info, setInfo] = useState("No song playing")
   const [songImg, setSongImg] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [name, setName] = useState(null) // for resending if error
+  const [count, setCount] = useState(1)
 
   const playsong = () => {
     if (songName !== "") {
@@ -19,11 +22,19 @@ function App() {
     }
   }
 
+  const songV2 = () => {
+    axios
+      .post(`${import.meta.env.VITE_SERVER}/music/songv2`, { count, name })
+      .then((res) => {
+        setAudioUrl(res.url)
+        setCount(count + 1)
+      })
+  }
+
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
       playsong()
     }
-
   }
 
   useEffect(() => {
@@ -41,6 +52,7 @@ function App() {
     socket.on('playsong', (song) => {
       setLoading(false)
       setSongName("")
+      setName(song.songName)
       setInfo(song.title)
       setAudioUrl(song.url)
       setSongImg(song.thumbnail.url)
@@ -83,18 +95,19 @@ function App() {
             <div className='imgBlur' ></div>
           </div>
         }
-      <div className='information'>{info}</div>
-      {
-        loading && <div className='loading' />
-      }
+        <div className='information'>{info}</div>
+        {
+          loading && <div className='loading' />
+        }
         <audio
           id="audioPlayer"
           src={audioUrl}
           autoPlay
           controls
           onPlay={e => console.log(e)}
-          onClick={(e) => {
-            console.log(e)
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null
+            songV2()
           }}
         >
           <source src="" />
