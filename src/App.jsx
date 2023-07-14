@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { socket } from './socket'
 import { BiSolidSearch } from 'react-icons/bi'
-import { axios } from 'axios'
+import axios from "axios";
 
 function App() {
 
@@ -23,6 +23,7 @@ function App() {
   }
 
   const songV2 = () => {
+    console.log('error handling')
     axios
       .post(`${import.meta.env.VITE_SERVER}/music/songv2`, { count, name })
       .then((res) => {
