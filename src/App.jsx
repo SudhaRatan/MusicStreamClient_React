@@ -9,7 +9,7 @@ function App() {
   const [audioUrl, setAudioUrl] = useState("")
   const [info, setInfo] = useState("No song playing")
   const [songImg, setSongImg] = useState(null)
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const playsong = () => {
     if (songName !== "") {
@@ -72,23 +72,30 @@ function App() {
           </div>
         </div>
       </div>
+      <div className='audioContainer'>
+        {
+          songImg &&
+          <div className='thumbCont'>
+            <img
+              src={songImg}
+              className='thumbnail'
+            />
+            <div className='imgBlur' ></div>
+          </div>
+        }
       <div className='information'>{info}</div>
       {
         loading && <div className='loading' />
       }
-      <div className='audioContainer'>
-        {
-          songImg &&
-          <img
-            src={songImg}
-            className='thumbnail'
-          />
-        }
         <audio
           id="audioPlayer"
           src={audioUrl}
           autoPlay
           controls
+          onPlay={e => console.log(e)}
+          onClick={(e) => {
+            console.log(e)
+          }}
         >
           <source src="" />
         </audio>
