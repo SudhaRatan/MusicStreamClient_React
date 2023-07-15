@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { socket } from './socket'
 import { BiSolidSearch } from 'react-icons/bi'
+import { BiReset } from 'react-icons/bi'
 import axios from "axios";
 
 function App() {
@@ -23,12 +24,16 @@ function App() {
   }
 
   const songV2 = () => {
-    console.log('error handling')
+    // console.log('error handling')
+    setLoading(true)
     axios
-      .post(`${import.meta.env.VITE_SERVER}/music/songv2`, { count, name })
+      .post(`http://${import.meta.env.VITE_SERVER}/music/songv2`, { count, name: name })
       .then((res) => {
-        setAudioUrl(res.url)
-        setCount(count + 1)
+        if(res.data.stat){
+          setAudioUrl(res.data.url)
+          setCount(count + 1)
+        }
+        setLoading(false)
       })
   }
 
@@ -53,7 +58,7 @@ function App() {
     socket.on('playsong', (song) => {
       setLoading(false)
       setSongName("")
-      setName(song.songName)
+      setName(song.title)
       setInfo(song.title)
       setAudioUrl(song.url)
       setSongImg(song.thumbnail.url)
@@ -100,19 +105,25 @@ function App() {
         {
           loading && <div className='loading' />
         }
-        <audio
-          id="audioPlayer"
-          src={audioUrl}
-          autoPlay
-          controls
-          onPlay={e => console.log(e)}
-          onError={({ currentTarget }) => {
-            currentTarget.onerror = null
-            songV2()
-          }}
-        >
-          <source src="" />
-        </audio>
+        <div className='audio-retry-cont'>
+          <audio
+            id="audioPlayer"
+            src={audioUrl}
+            autoPlay
+            controls
+            // onPlay={e => console.log(e)}
+            onError={(e) => {
+              e.currentTarget.onerror = null
+              // console.log('qwe')
+              songV2()
+            }}
+          >
+            <source src="" />
+          </audio>
+          <div onClick={() => {songV2()}}>
+            <BiReset size={30} color='#ececec' />
+          </div>
+        </div>
       </div>
     </div>
   )
