@@ -59,6 +59,7 @@ function App() {
     socket.on('disconnect', onDisconnect);
 
     socket.on('playsong', (song) => {
+      setCount(0)
       setLoading(false)
       setSongName("")
       setName(song.title)
