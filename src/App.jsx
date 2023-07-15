@@ -30,6 +30,7 @@ function App() {
       .post(`http://${import.meta.env.VITE_SERVER}/music/songv2`, { count, name: name })
       .then((res) => {
         if(res.data.stat){
+          console.log("V",count)
           setAudioUrl(res.data.url)
           setCount(count + 1)
         }
