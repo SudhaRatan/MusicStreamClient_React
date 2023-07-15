@@ -24,18 +24,20 @@ function App() {
   }
 
   const songV2 = () => {
+    if (name !== null) {
+      setLoading(true)
+      axios
+        .post(`${import.meta.env.VITE_SERVER}/music/songv2`, { count, name: name })
+        .then((res) => {
+          if (res.data.stat) {
+            console.log("V", count)
+            setAudioUrl(res.data.url)
+            setCount(count + 1)
+          }
+          setLoading(false)
+        })
+    }
     // console.log('error handling')
-    setLoading(true)
-    axios
-      .post(`http://${import.meta.env.VITE_SERVER}/music/songv2`, { count, name: name })
-      .then((res) => {
-        if(res.data.stat){
-          console.log("V",count)
-          setAudioUrl(res.data.url)
-          setCount(count + 1)
-        }
-        setLoading(false)
-      })
   }
 
   const handleEnter = (e) => {
@@ -121,7 +123,7 @@ function App() {
           >
             <source src="" />
           </audio>
-          <div onClick={() => {songV2()}}>
+          <div onClick={() => { songV2() }}>
             <BiReset size={30} color='#ececec' />
           </div>
         </div>
