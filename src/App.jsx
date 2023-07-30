@@ -4,6 +4,7 @@ import { socket } from './socket'
 import { BiSolidSearch } from 'react-icons/bi'
 import { BiReset } from 'react-icons/bi'
 import axios from "axios";
+import OnlineCount from './Components/OnlineCount/OnlineCount'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(null) // for resending if error
   const [count, setCount] = useState(1)
+  const [OC,setOC] = useState(false)
 
   const playsong = () => {
     if (songName !== "") {
@@ -53,6 +55,7 @@ function App() {
 
     function onDisconnect() {
       console.log('Disconnected')
+      setOC(false)
     }
 
     socket.on('connect', onConnect);
@@ -66,6 +69,11 @@ function App() {
       setInfo(song.title)
       setAudioUrl(song.url)
       setSongImg(song.thumbnail.url)
+    })
+
+    socket.on('OnlineCount', (c) => {
+      // console.log(c)
+      setOC(c)
     })
 
     return () => {
@@ -129,6 +137,8 @@ function App() {
           </div>
         </div>
       </div>
+     
+      <OnlineCount OnlineCount={OC}/>
     </div>
   )
 }

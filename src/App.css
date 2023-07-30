@@ -70,7 +70,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap:10px;
+  gap: 10px;
 }
 
 .thumbCont {
@@ -89,7 +89,7 @@
   transition: backdrop-filter 0.5s;
 }
 
-.imgBlur:hover{
+.imgBlur:hover {
   backdrop-filter: blur(10px);
 }
 
@@ -129,6 +129,7 @@
     width: 25vw;
     height: 25vw;
   }
+
   .imgBlur {
     width: 25vw;
     height: 25vw;
